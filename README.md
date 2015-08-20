@@ -1,8 +1,8 @@
-# PR_matrix_multiplication-
-### projekt_zaliczeniowy, opis do uzupelnienia 
+# PR_matrix_multiplication
+### projekt zaliczeniowy
 
 ## TODO
-- Maciej szefie, wrzuc tu opis (tresc) zadania, ktore mamy zrobi, 
+- Maciej szefie, wrzuc tu opis (tresc) zadania, ktore mamy zrobić ✓
 - zaliczyc  ;)
 
 

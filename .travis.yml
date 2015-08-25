@@ -1,4 +1,3 @@
 language: c
-install: make
 compiler: gcc
-script: bin/matrix_multiplication
+script: make

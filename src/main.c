@@ -11,6 +11,7 @@ int main()
 
 	omp_set_num_threads(THREADS_NO);
 
+	printf("Hello travis \n");
 #pragma omp parallel
 	{
 		for(i = 0; i <= 5; i++)

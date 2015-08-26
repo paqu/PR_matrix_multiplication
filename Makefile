@@ -27,7 +27,7 @@ $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	mkdir -p $(OBJDIR)
 	mkdir -p $(DEPDIR)
 	$(CC) -c $(CFLAGS) $< -o $@
-	$(CC) -MM -MT '$(OBJDIR)/$*.o' $(SRCDIR)/$*.c > $(DEPDIR)/$*.d
+	$(CC) $(CFLAGS) -MM -MT '$(OBJDIR)/$*.o' $(SRCDIR)/$*.c > $(DEPDIR)/$*.d
 	@echo "Compiled $<"
 
 .PHONY: clean

@@ -17,7 +17,7 @@ int main()
 			printf("[%d] Hello World, i = %d\n", omp_get_thread_num(), i);
 	}
 
-	return EXIT_SUCCESS;
+	return EXIT_SUCCESS
 
 }
 

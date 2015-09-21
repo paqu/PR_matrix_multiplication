@@ -5,7 +5,7 @@ struct matrix {
 	int ** matrix;
 	int x;
 	int y;
-}
+};
 
 #endif
 

@@ -1,6 +1,8 @@
 #include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "matrix.h"
+
 
 #define THREADS_NO 4
 

@@ -2,7 +2,7 @@
 #define MATRIX_H
 
 struct matrix {
-	int **matrix;
+	float **matrix;
 	int x;
 	int y;
 };

@@ -31,8 +31,9 @@ void matrix_populate_random(struct matrix *m)
 {
 	int i,j;
 	for(i = 0; i < m->x; i++)
-		for(j = 0; j < m->y; j++)
-			m->matrix[i][j] = rand() % 100;
+		for(j = 0; j < m->y; j++) {
+			m->matrix[i][j] = (float) rand() / RAND_MAX;
+		}
 }
 
 void matrix_multiply_jki(struct matrix *m_in_a, struct matrix *m_in_b, struct matrix *m_result)
@@ -41,8 +42,8 @@ void matrix_multiply_jki(struct matrix *m_in_a, struct matrix *m_in_b, struct ma
 
 	for (j = 0; j < m_result->y; j++)
 		for (k = 0; k < m_result->y; k++)
-                  for (i = 0; i < m_result->x; i++)
-                        m_result->matrix[i][j] += m_in_a->matrix[i][k] * m_in_b->matrix[k][j];
+			for (i = 0; i < m_result->x; i++)
+				m_result->matrix[i][j] += m_in_a->matrix[i][k] * m_in_b->matrix[k][j];
 }
 
 void matrix_print(struct matrix *m)
@@ -51,7 +52,7 @@ void matrix_print(struct matrix *m)
 
 	for(i = 0; i < m->x; i++) {
 		for(j = 0; j < m->y; j++) {
-			printf("%d ", m->matrix[i][j]);
+			printf("%.5f ", m->matrix[i][j]);
 		}
 		printf("\n");
 	}

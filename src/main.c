@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
 
 	int x,
 	    y,
+	    n,
 	    verbose = 0,
 	    fd = -1,
 	    no_threads;
@@ -148,7 +149,12 @@ int main(int argc, char *argv[])
 
 	memset(buff,0,BUFF_SIZE);
 	sprintf(buff,"%d\t%ld.%09ld\n",x,ts_diff.tv_sec,ts_diff.tv_nsec);
-	write(fd,buff,BUFF_SIZE);
+
+	n = write(fd,buff,BUFF_SIZE);
+	if ( n != BUFF_SIZE) {
+		perror("write:");
+		return EXIT_FAILURE;
+	}
 
 	matrix_free(&matrix_a);
 	matrix_free(&matrix_b);

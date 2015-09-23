@@ -3,11 +3,15 @@
 #include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <getopt.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "matrix.h"
 
-
+#define BUFF_SIZE 128
 
 
 
@@ -31,7 +35,8 @@ void print_usage(FILE *stream, const char *program_name)
 			"*********************************\n\n");
 	fprintf(stream,"Usage: \t  %s "
 	               "\t size "
-	               "\t threads_no \n",
+	               "\t threads_no \n"
+	               "\t filename \n",
 	               program_name);
 	fprintf(stream, "\n**************************************"
 			"*********************************\n");
@@ -51,7 +56,12 @@ int main(int argc, char *argv[])
 	int x,
 	    y,
 	    verbose = 0,
+	    fd = -1,
 	    no_threads;
+
+	const char *filename = NULL;
+
+	char buff[BUFF_SIZE];
 /*
 	const struct option long_options[] = {
 		{ "help",    0, NULL, 'h' },
@@ -68,8 +78,15 @@ int main(int argc, char *argv[])
 		      *matrix_b = NULL,
 		      *matrix_c = NULL;
 
-	if (argc != 3 ) {
+	if (argc != 4 ) {
 		print_usage(stdout,argv[0]);
+		return EXIT_FAILURE;
+	}
+
+	filename = argv[3];
+
+	if ( -1 == (fd = open(filename,O_RDWR|O_CREAT|O_APPEND,0644))) {
+		perror("Open:");
 		return EXIT_FAILURE;
 	}
 
@@ -89,10 +106,12 @@ int main(int argc, char *argv[])
 	}
 
 	if (verbose == 1 ) {
-		printf("Size x matrix is:%d\n",x);
-		printf("Size y matrix is:%d\n",y);
-		printf("The desired number of threads is:%d\n",no_threads);
+		printf("Size x matrix is:\t%d\n",x);
+		printf("Size y matrix is:\t%d\n",y);
+		printf("The desired numbe  of threads is:\t%d\n",no_threads);
+		printf("Filename is: \t%s\n",filename);
 	}
+
 
 	srand(time(NULL));
 
@@ -127,9 +146,15 @@ int main(int argc, char *argv[])
 	printf("computed in %ld.%09ld  seconds\n",
 			ts_diff.tv_sec, ts_diff.tv_nsec);
 
+	memset(buff,0,BUFF_SIZE);
+	sprintf(buff,"%d\t%ld.%09ld\n",x,ts_diff.tv_sec,ts_diff.tv_nsec);
+	write(fd,buff,BUFF_SIZE);
+
 	matrix_free(&matrix_a);
 	matrix_free(&matrix_b);
 	matrix_free(&matrix_c);
+	close(fd);
+
 	return EXIT_SUCCESS;
 
 }

@@ -1,6 +1,6 @@
 #define _GNU_SOURCE
 
-#include <omp.h>
+//#include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -25,6 +25,7 @@ struct timespec get_timespec_diff(struct timespec start, struct timespec end)
 
 int main()
 {
+	printf("Hello world\n");
 
 	srand(time(NULL));
 
@@ -66,6 +67,10 @@ int main()
 	ts_diff = get_timespec_diff(ts_start, ts_end);
 	printf("computed in %ld.%09ld  seconds\n",
 			ts_diff.tv_sec, ts_diff.tv_nsec);
+
+	matrix_free(&matrix_a);
+	matrix_free(&matrix_b);
+	matrix_free(&matrix_c);
 
 	return EXIT_SUCCESS;
 

@@ -17,7 +17,7 @@ int matrix_init(struct matrix **m, int x, int y)
 	if(((*m)->matrix = malloc((*m)->x * sizeof(int *))) == NULL)
 		return -1;
 
-	for(i = 0; i < (*m)->x; i++) {
+	for (i = 0; i < (*m)->x; i++) {
 
 		if(((*m)->matrix[i] = malloc((*m)->y * sizeof(int))) == NULL)
 			return -1;
@@ -25,6 +25,21 @@ int matrix_init(struct matrix **m, int x, int y)
 
 	return 0;
 
+}
+void matrix_free(struct matrix **m)
+{
+	int i;
+
+	for (i = 0; i < (*m)->x; ++i) {
+		free((*m)->matrix[i]);		
+		(*m)->matrix[i] = NULL;
+	}
+
+	free((*m)->matrix);
+	(*m)->matrix = NULL;
+
+	free(*m);
+	*m = NULL;
 }
 
 void matrix_populate_random(struct matrix *m)

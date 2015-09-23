@@ -2,3 +2,5 @@ obj
 bin
 dep
 .ycm_extra_conf.pyc
+*.swp
+valgrind

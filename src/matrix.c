@@ -50,10 +50,9 @@ void matrix_populate_random(struct matrix *m)
 			m->matrix[i][j] = (float) rand() / RAND_MAX;
 		}
 }
-
-void matrix_multiply_jki(struct matrix *m_in_a, struct matrix *m_in_b, struct matrix *m_result)
+void matrix_multiply_jki(struct matrix *m_in_a, struct matrix *m_in_b, struct matrix *m_result,int radius);
 {
-	int i, j, k;
+	int i, j, k,r;
 
 	for (j = 0; j < m_result->y; j++)
 		for (k = 0; k < m_result->y; k++)
@@ -61,6 +60,17 @@ void matrix_multiply_jki(struct matrix *m_in_a, struct matrix *m_in_b, struct ma
 				m_result->matrix[i][j] += m_in_a->matrix[i][k] * m_in_b->matrix[k][j];
 }
 
+void matrix_multiply_ijk(struct matrix *m_in_a, struct matrix *m_in_b, struct matrix *m_result,int radius)
+{
+	int i,j,k,r;
+}
+
+void matrix_multiply_6jki(struct matrix *m_in_a, struct matrix *m_in_b, struct matrix *m_result,int radius)
+{
+	int i,j,k,r;
+
+
+}
 void matrix_print(struct matrix *m)
 {
 	int i,j;

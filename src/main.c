@@ -34,9 +34,11 @@ void print_usage(FILE *stream, const char *program_name)
 	fprintf(stream, "**************************************"
 			"*********************************\n\n");
 	fprintf(stream,"Usage: \t  %s "
-	               "\t size "
-	               "\t threads_no \n"
-	               "\t filename \n",
+	               " size"
+	               " threads_no"
+	               " filename"
+	               " func_name"
+		       " radius ",
 	               program_name);
 	fprintf(stream, "\n**************************************"
 			"*********************************\n");
@@ -56,13 +58,23 @@ int main(int argc, char *argv[])
 	int x,
 	    y,
 	    n,
-	    verbose = 0,
-	    fd = -1,
+	    radius   =  0,
+	    func_idx =  0,
+	    verbose  =  0,
+	    fd       = -1,
 	    no_threads;
 
 	const char *filename = NULL;
 
 	char buff[BUFF_SIZE];
+
+	void (*func[3])(struct matrix *,struct matrix *, struct matrix *,int) = {
+		matrix_multiply_ijk,
+		matrix_multiply_jki,
+		matrix_multiply_6jki
+	};
+
+	void (*matrix_multiply)(struct matrix *a, struct matrix *b, struct matrix *c,int r);
 /*
 	const struct option long_options[] = {
 		{ "help",    0, NULL, 'h' },
@@ -79,15 +91,8 @@ int main(int argc, char *argv[])
 		      *matrix_b = NULL,
 		      *matrix_c = NULL;
 
-	if (argc != 4 ) {
+	if (argc != 6 ) {
 		print_usage(stdout,argv[0]);
-		return EXIT_FAILURE;
-	}
-
-	filename = argv[3];
-
-	if ( -1 == (fd = open(filename,O_RDWR|O_CREAT|O_APPEND,0644))) {
-		perror("Open:");
 		return EXIT_FAILURE;
 	}
 
@@ -106,13 +111,36 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	if (verbose == 1 ) {
+	if ( -1 == check_arg(&radius,argv[5])) {
+		fprintf(stderr,"Radius is not int or equal to 0\n");
+		return EXIT_FAILURE;
+	}
+
+	filename = argv[3];
+
+	if ( -1 == (fd = open(filename,O_RDWR|O_CREAT|O_APPEND,0644))) {
+		perror("Open:");
+		return EXIT_FAILURE;
+	}
+	
+	if ( 0 == strncmp(argv[4],"ijk",3)) 
+		func_idx = 0;
+
+	if ( 0 == strncmp(argv[4],"jki",3)) 
+		func_idx = 1;
+
+	if ( 0 == strncmp(argv[4],"6jki",4)) 
+		func_idx = 2;
+
+	if (verbose == 0 ) {
 		printf("Size x matrix is:\t%d\n",x);
 		printf("Size y matrix is:\t%d\n",y);
 		printf("The desired numbe  of threads is:\t%d\n",no_threads);
 		printf("Filename is: \t%s\n",filename);
+		printf("Func idx is: \t%d\n",func_idx);
 	}
 
+	matrix_multiply = func[func_idx];
 
 	srand(time(NULL));
 
@@ -136,7 +164,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	matrix_multiply_jki(matrix_a, matrix_b, matrix_c,0);
+	matrix_multiply(matrix_a, matrix_b, matrix_c,radius);
 
 	if(clock_gettime(CLOCK_REALTIME, &ts_end) == -1) {
 		perror("clock gettime");

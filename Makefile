@@ -1,7 +1,7 @@
 CC	= gcc
 TARGET	= matrix_multiplication
 CFLAGS	= -Wall -Wextra -pedantic -std=c99 -g -O0 -fopenmp -Iinc
-LFLAGS	= -fopenmp -lrt
+LFLAGS	= -Wl,--no-as-needed -fopenmp -lrt
 SRCDIR	= src
 OBJDIR	= obj
 BINDIR	= bin

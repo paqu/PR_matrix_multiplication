@@ -166,9 +166,9 @@ int main(int argc, char *argv[])
 			ts_diff.tv_sec, ts_diff.tv_nsec);
 
 	memset(buff,0,BUFF_SIZE);
-	sprintf(buff,"%d\t%ld.%09ld\n",x,ts_diff.tv_sec,ts_diff.tv_nsec);
+	sprintf(buff, "%d,%ld.%09ld\n", x, ts_diff.tv_sec, ts_diff.tv_nsec);
 
-	n = write(fd,buff,BUFF_SIZE);
+	n = write(fd,buff,strlen(buff));
 	if ( n != BUFF_SIZE) {
 		perror("write:");
 		return EXIT_FAILURE;

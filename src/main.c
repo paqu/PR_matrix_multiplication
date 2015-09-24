@@ -5,14 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <getopt.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include "matrix.h"
 
 #define BUFF_SIZE 128
-#define DEBUG_PRINT 1
+#define DEBUG_PRINT 0
 
 struct timespec get_timespec_diff(struct timespec start, struct timespec end)
 {
@@ -30,7 +26,7 @@ struct timespec get_timespec_diff(struct timespec start, struct timespec end)
 		
 void print_usage(FILE *stream, const char *program_name)
 {
-	fprintf(stream,"Usage: %s size threads_no filename func_name radius\n",
+	fprintf(stream,"Usage: %s size threads_no radius func_name [filename]\n",
 			program_name);
 }
 
@@ -46,15 +42,11 @@ int main(int argc, char *argv[])
 
 	int x,
 	    y,
-	    n,
 	    radius   =  0,
 	    func_idx =  0,
-	    fd       = -1,
 	    no_threads;
 
-	const char *filename = NULL;
-
-	char buff[BUFF_SIZE];
+	FILE *output_file = NULL;
 
 	void (*func[3])(struct matrix *,struct matrix *, struct matrix *,int) = {
 		matrix_multiply_ijk,
@@ -80,7 +72,7 @@ int main(int argc, char *argv[])
 		      *matrix_c = NULL;
 
 
-	if (argc != 6 ) {
+	if (argc < 5 ) {
 		print_usage(stderr,argv[0]);
 		return EXIT_FAILURE;
 	}
@@ -100,18 +92,11 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	if ( -1 == check_arg(&radius,argv[5])) {
+	if ( -1 == check_arg(&radius,argv[3])) {
 		fprintf(stderr,"Radius is not int or equal to 0\n");
 		return EXIT_FAILURE;
 	}
 
-	filename = argv[3];
-
-	if ( -1 == (fd = open(filename,O_RDWR|O_CREAT|O_APPEND,0644))) {
-		perror("Open:");
-		return EXIT_FAILURE;
-	}
-	
 	if ( 0 == strncmp(argv[4],"ijk",3)) 
 		func_idx = 0;
 
@@ -121,11 +106,22 @@ int main(int argc, char *argv[])
 	if ( 0 == strncmp(argv[4],"6jki",4)) 
 		func_idx = 2;
 
+	if(argc == 6) {
+
+		if (NULL == (output_file = fopen(argv[5], "a+"))) {
+			perror("Opening file");
+			return EXIT_FAILURE;
+		}
+
+	} else {
+		output_file = stdout;
+	}
+
 	if (DEBUG_PRINT) {
 		printf("Size x matrix: %d\n",x);
 		printf("Size y matrix: %d\n",y);
 		printf("Threads no: %d\n",no_threads);
-		printf("Output file: %s\n",filename);
+		printf("Output file: %s\n",argv[5]);
 		printf("Function id: %d\n",func_idx);
 	}
 
@@ -161,22 +157,24 @@ int main(int argc, char *argv[])
 	}
 
 	ts_diff = get_timespec_diff(ts_start, ts_end);
-	printf("computed in %ld.%09ld  seconds\n",
+	if(DEBUG_PRINT)
+		printf("computed in %ld.%09ld  seconds\n",
 			ts_diff.tv_sec, ts_diff.tv_nsec);
 
-	memset(buff,0,BUFF_SIZE);
-	sprintf(buff, "%d,%ld.%09ld\n", x, ts_diff.tv_sec, ts_diff.tv_nsec);
+	fprintf(output_file, "%d,%ld.%09ld\n", x, ts_diff.tv_sec, ts_diff.tv_nsec);
 
+	/*
 	n = write(fd,buff,strlen(buff));
-	if ( n != BUFF_SIZE) {
+	if ( n != strlen(buff)) {
 		perror("write:");
 		return EXIT_FAILURE;
 	}
+	*/
 
 	matrix_free(&matrix_a);
 	matrix_free(&matrix_b);
 	matrix_free(&matrix_c);
-	close(fd);
+	fclose(output_file);
 
 	return EXIT_SUCCESS;
 

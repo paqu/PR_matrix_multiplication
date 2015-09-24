@@ -31,18 +31,8 @@ struct timespec get_timespec_diff(struct timespec start, struct timespec end)
 		
 void print_usage(FILE *stream, const char *program_name)
 {
-	fprintf(stream, "**************************************"
-			"*********************************\n\n");
-	fprintf(stream,"Usage: \t  %s "
-	               " size"
-	               " threads_no"
-	               " filename"
-	               " func_name"
-		       " radius ",
-	               program_name);
-	fprintf(stream, "\n**************************************"
-			"*********************************\n");
-
+	fprintf(stream,"Usage: %s size threads_no filename func_name radius\n",
+			program_name);
 }
 
 int check_arg(int * param, char * arg)
@@ -133,11 +123,11 @@ int main(int argc, char *argv[])
 		func_idx = 2;
 
 	if (verbose == 0 ) {
-		printf("Size x matrix is:\t%d\n",x);
-		printf("Size y matrix is:\t%d\n",y);
-		printf("The desired numbe  of threads is:\t%d\n",no_threads);
-		printf("Filename is: \t%s\n",filename);
-		printf("Func idx is: \t%d\n",func_idx);
+		printf("Size x matrix: %d\n",x);
+		printf("Size y matrix: %d\n",y);
+		printf("Threads no: %d\n",no_threads);
+		printf("Output file: %s\n",filename);
+		printf("Function id: %d\n",func_idx);
 	}
 
 	matrix_multiply = func[func_idx];

@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	matrix_multiply_jki(matrix_a, matrix_b, matrix_c);
+	matrix_multiply_jki(matrix_a, matrix_b, matrix_c,0);
 
 	if(clock_gettime(CLOCK_REALTIME, &ts_end) == -1) {
 		perror("clock gettime");

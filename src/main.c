@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
 		func_idx = 2;
 	} else {
 		fprintf(stderr, "Wrong function name!\n");
+		return EXIT_FAILURE;
 	};
 
 	/* Initialize program */

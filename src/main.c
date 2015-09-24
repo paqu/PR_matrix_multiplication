@@ -12,8 +12,7 @@
 #include "matrix.h"
 
 #define BUFF_SIZE 128
-
-
+#define DEBUG_PRINT 1
 
 struct timespec get_timespec_diff(struct timespec start, struct timespec end)
 {
@@ -50,7 +49,6 @@ int main(int argc, char *argv[])
 	    n,
 	    radius   =  0,
 	    func_idx =  0,
-	    verbose  =  0,
 	    fd       = -1,
 	    no_threads;
 
@@ -81,8 +79,9 @@ int main(int argc, char *argv[])
 		      *matrix_b = NULL,
 		      *matrix_c = NULL;
 
+
 	if (argc != 6 ) {
-		print_usage(stdout,argv[0]);
+		print_usage(stderr,argv[0]);
 		return EXIT_FAILURE;
 	}
 
@@ -122,7 +121,7 @@ int main(int argc, char *argv[])
 	if ( 0 == strncmp(argv[4],"6jki",4)) 
 		func_idx = 2;
 
-	if (verbose == 0 ) {
+	if (DEBUG_PRINT) {
 		printf("Size x matrix: %d\n",x);
 		printf("Size y matrix: %d\n",y);
 		printf("Threads no: %d\n",no_threads);

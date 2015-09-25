@@ -134,6 +134,8 @@ int main(int argc, char *argv[])
 	matrix_populate_random(matrix_a);
 	matrix_populate_random(matrix_b);
 
+	omp_set_num_threads(no_threads);
+
 	/* Perform measurement on computation */
 
 	if(clock_gettime(CLOCK_REALTIME, &ts_start) == -1) {

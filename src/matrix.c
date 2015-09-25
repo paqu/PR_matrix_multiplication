@@ -1,6 +1,7 @@
 #include "matrix.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <omp.h>
 
 
 int matrix_init(struct matrix **m, int x, int y)
@@ -56,6 +57,7 @@ void matrix_multiply_jki(struct matrix *m_in_a, struct matrix *m_in_b, struct ma
 	int i, j, k;
 	(void) radius;
 
+#pragma omp parallel for schedule(static) private(i,j,k)
 	for (j = 0; j < m_result->y; j++)
 		for (k = 0; k < m_result->y; k++)
 			for (i = 0; i < m_result->x; i++)
@@ -77,6 +79,7 @@ void matrix_multiply_6jki(struct matrix *m_in_a, struct matrix *m_in_b, struct m
 {
 	int i,j,k,ii,jj,kk;
 	
+#pragma omp parallel for schedule(static) private(i,j,k,ii,jj,kk)
 	for (j = 0; j < m_result->y; j += radius)
 		for (k = 0; k < m_result->y; k += radius)
 			for (i = 0; i < m_result->y; i += radius)

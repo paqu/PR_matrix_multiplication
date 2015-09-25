@@ -1,11 +1,9 @@
 # PR_matrix_multiplication
 ### projekt zaliczeniowy
 
-## TODO
-- Maciej szefie, wrzuc tu opis (tresc) zadania, ktore mamy zrobić ✓
-- zaliczyc  ;)
 
-
+## LINK DO TRAVIS BUILD
+https://travis-ci.org/paqu/PR_matrix_multiplication/builds 
 
 ## ZADANIE
 
